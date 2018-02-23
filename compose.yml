@@ -1,0 +1,19 @@
+version: "3"
+services:
+  app:
+    build: /home/circleci/sample
+    expose:
+      - "3000"
+  waiter:
+    image: waisbrot/wait
+    environment:
+      TARGETS: "app:3000"
+      TIMEOUT: 300
+    depends_on:
+      - app
+  tester:
+    image: alekzonder/puppeteer
+    depends_on: 
+      - waiter
+    command: echo "puppeteer available.." && tail -f /dev/null
+    
